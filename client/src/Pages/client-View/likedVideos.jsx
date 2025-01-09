@@ -1,11 +1,11 @@
 import React from 'react'
 
-function Home() {
+function LikedVideos() {
   return (
     <div>
-      Home page
+      
     </div>
   )
 }
 
-export default Home
+export default LikedVideos

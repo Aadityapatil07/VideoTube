@@ -1,4 +1,4 @@
-import { History, House, ListVideo, SquarePlay, ThumbsUp, UserRoundCheck } from "lucide-react"
+import { Compass, History, House, ListVideo, SquarePlay, ThumbsUp, UserRoundCheck } from "lucide-react"
 
 export const sidebarContent = [
     {
@@ -7,28 +7,33 @@ export const sidebarContent = [
       icon: House,
     },
     {
+      name: "Explore",
+      url: "/Explore",
+      icon: Compass,
+    },
+    {
       name: "Subscriptions",
-      url: "/subscriptions",
+      url: "/feed/subscriptions",
       icon: UserRoundCheck,
     },
     {
       name: "History",
-      url: "/history",
+      url: "/feed/history",
       icon: History,
     },
     {
-      name: "Playlist",
-      url: "/playlist",
+      name: "Playlists",
+      url: "/feed/playlists",
       icon: ListVideo,
     },
     {
       name: "Your Videos",
-      url: "your-videos",
+      url: "/your-videos",
       icon: SquarePlay,
     },
     {
       name: "Liked Videos",
-      url: "/liked-videos",
+      url: "/feed/liked-videos",
       icon: ThumbsUp,
     },
 ]

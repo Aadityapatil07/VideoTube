@@ -2,14 +2,7 @@
 
 import * as React from "react"
 import {
-  BookOpen,
-  Bot,
   TvMinimalPlay,
-  Frame,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
 } from "lucide-react"
 
 import { NavUser } from "@/components/home/nav-user"
@@ -24,6 +17,7 @@ import {
   SidebarMenuItem
 } from "@/components/ui/sidebar"
 import { sidebarContent } from "@/conf/config.js"
+import { Link } from "react-router-dom"
 
 // This is sample data.
 const data = {
@@ -55,21 +49,22 @@ export function AppSidebar({ ...props }) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>
+        <SidebarMenu className="gap-5">
           {sidebarContent.map((item)=>(
+            <Link key={item.name} to={item.url}>
             <SidebarMenuButton 
-            key={item.name}
             size="sm">
-              <div >
+              <div className="ml-1" >
               <item.icon size={20}/>
               </div>
-              <div className="grid flex-1 text-left text-sm leading-tight mt-1 mb-1">
+              <div className="grid flex-1 text-left text-base leading-tight mt-1 mb-1">
                 <span className="truncate font-semibold">
-                <h1 className="text-sm tracking-tighter font-normal">{item.name}</h1>
+                <h1 className="text-base tracking-tighter font-normal">{item.name}</h1>
                 </span>
               </div>
               
             </SidebarMenuButton>
+            </Link>
           )
               
           )}
