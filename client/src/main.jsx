@@ -7,7 +7,6 @@ import Home from './Pages/client-View/home'
 import Subscriptions from './Pages/client-View/subscriptions'
 import Playlists from './Pages/client-View/playlists'
 import History from './Pages/client-View/history'
-import Playlist from './Pages/client-View/playlist'
 import LikedVideos from './Pages/client-View/likedVideos'
 import Login from './Pages/auth/login'
 import Register from './Pages/auth/register'
@@ -20,7 +19,7 @@ import { Provider } from 'react-redux'
 import store from './store/store'
 import { Toaster } from './components/ui/toaster'
 import Playlist from './Pages/client-View/playlist'
-import UserDashboard from './Pages/client-View/userDashboard'
+
 
 
 const router = createBrowserRouter([
@@ -33,60 +32,60 @@ const router = createBrowserRouter([
         element:<Home/>   
       },
       {
-        path:"/explore",
+        path:"explore",
         element: <Explore/>
       },
       {
-        path:"/search",
+        path:"search",
         element: <Search/>
       },
       {
-        path:"/watch-video/:id",
+        path:"watch-video/:videoId",
         element: <WatchVideo/>
       },
       {
-        path:"/:ChannelName",
+        path:":ChannelName",
         element: <Channel/>
       },
       {
-        path:"/feed",
+        path:"feed",
         children:[
           {
-            path:"/subscriptions",
+            path:"subscriptions",
             element: <Subscriptions/>
           },
           {
-            path:"/playlists",
+            path:"playlists",
             element:<Playlists/>
           },
           {
-            path:"/history",
+            path:"history",
             element: <History/>
           },
           {
-            path:"/liked-videos",
+            path:"liked-videos",
             element:<LikedVideos/>
           }
         ]
       },
       {
-        path:"/auth",
+        path:"auth",
         children:[
           {
-            path:"/login",
+            path:"login",
             element:<Login/>
           },
           {
-            path:"/register",
+            path:"register",
             element:<Register/>
           }
         ]
       },
       {
-        path:"/user",
+        path:"user",
         children:[
           {
-            path:"/Dashboard",
+            path:"Dashboard",
             element:<UserDashboard/>
           },
         ]

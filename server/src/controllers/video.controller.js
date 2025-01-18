@@ -37,35 +37,6 @@ const getAllVideos = asyncHandler(async (req, res) => {
           as: "user",
         },
       },
-      {
-        $lookup: {
-          from: "likes",
-          localField: "_id",
-          foreignField: "video",
-          as: "likes",
-        },
-      },
-      {
-        $addFields: {
-          likesCount: {
-            $size: "likes"
-          },
-          isLike: {
-            $cond: {
-              if: {
-                $in: [req.user?._id, "likes.likedBy"],
-                $then: true,
-                $else: false
-              }
-
-            }
-
-          }
-
-        }
-
-      },
-
       // Match with the combined filter
       { $match: filter },
 
@@ -74,18 +45,14 @@ const getAllVideos = asyncHandler(async (req, res) => {
         $project: {
           _id: 1,
           title: 1,
-          description: 1,
           views: 1,
-          likes: 1,
           createdAt: 1,
-          category: 1,
           owner: 1,
           "user.username": 1,
           "user.fullName": 1,
+          "user.avatar": 1,
           thumbnail: 1,
           videoFile: 1,
-          likesCount: 1,
-          isLike: 1
         },
       },
 
@@ -162,35 +129,35 @@ const publishAVideo = asyncHandler(async (req, res) => {
 
 const getVideoById = asyncHandler(async (req, res) => {
   const { videoId } = req.params;
-  const userId = req.user._id
+  // const userId = req.user._id
 
   if (!videoId) {
     throw new ApiError(404, "videoId is missing");
   }
 
   try {
-    await Video.findByIdAndUpdate(
-      videoId,
+    await Video.findOneAndUpdate(
+      {_id: videoId},
       { $inc: { views: 1 } }, // Increment view count by 1
       { new: true } // Return the updated document
     )
-    const user = await User.findById(userId)
+    // const user = await User.findById(userId)
 
-    if (!user.watchHistory.includes(videoId)){
-      user.watchHistory.push(videoId)
+    // if (!user.watchHistory.includes(videoId)){
+    //   user.watchHistory.push(videoId)
 
-      if (user.watchHistory.length > 10) {
-        user.watchHistory.shift(); // Remove the first video
-      }
+    //   if (user.watchHistory.length > 10) {
+    //     user.watchHistory.shift(); // Remove the first video
+    //   }
 
-      await user.save();
-    }
+    //   await user.save();
+    // }
 
     // Find the video using aggregation pipeline
     const video = await Video.aggregate([
       {
         $match: {
-          _id: new mongoose.Types.ObjectId(videoId),
+          _id: new mongoose.Types.ObjectId(videoId.trim()),
         },
       },
       {
@@ -234,6 +201,7 @@ const getVideoById = asyncHandler(async (req, res) => {
           owner: 1,
           "user.username": 1,
           "user.fullName": 1,
+          "user.avatar": 1,
           thumbnail: 1,
           videoFile: 1,
           likesCount: 1,
