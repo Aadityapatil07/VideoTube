@@ -6,7 +6,6 @@ const store = configureStore({
     reducer:{
         videos : videoSlice,
         user : userSlice
-
     }
 })
 

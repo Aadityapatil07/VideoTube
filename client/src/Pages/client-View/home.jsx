@@ -29,7 +29,9 @@ function Home() {
                 
               // </div>
               <VideoCard
-              video={item}/>
+              key={item._id}
+              video={item}
+              />
             )) : (null)
           }
       </div>

@@ -29,11 +29,21 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { Navigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { logoutUser } from "@/store/auth-slice/userSlice"
 
 export function NavUser({
   user,
 }) {
   const { isMobile } = useSidebar()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const handleLogout = ()=>{
+    dispatch(logoutUser)
+    navigate('/auth/login')
+  }
 
   return (
     <SidebarMenu>
@@ -77,18 +87,14 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Sparkles />
-                Upgrade to Pro
+                VideoTube Premium
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={()=> navigate('/user/Dashboard')}>
                 <BadgeCheck />
                 Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
@@ -96,7 +102,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={()=>handleLogout()}>
               <LogOut />
               Log out
             </DropdownMenuItem>

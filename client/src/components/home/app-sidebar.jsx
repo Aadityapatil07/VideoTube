@@ -5,7 +5,10 @@ import {
   TvMinimalPlay,
 } from "lucide-react"
 
+import { ChevronsUpDown } from "lucide-react"
+
 import { NavUser } from "@/components/home/nav-user"
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import {
   Sidebar,
   SidebarContent,
@@ -17,7 +20,9 @@ import {
   SidebarMenuItem
 } from "@/components/ui/sidebar"
 import { sidebarContent } from "@/conf/config.js"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux"
+
 
 // This is sample data.
 const data = {
@@ -27,8 +32,13 @@ const data = {
     avatar: "/avatars/shadcn.jpg",
   },
 }
+ 
 
 export function AppSidebar({ ...props }) {
+  const navigate = useNavigate()
+
+const {userData, isAuthenticated }= useSelector((state)=> state.user)
+console.log(userData , isAuthenticated)
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader >
@@ -71,7 +81,28 @@ export function AppSidebar({ ...props }) {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {isAuthenticated?
+        (<NavUser user={data.user} />):(
+          <SidebarMenu>
+            
+          <SidebarMenuButton
+          onClick={()=> navigate('/auth/login')}
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage src="/avatars/shadcn.jpg" alt="login"/>
+                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+              </Avatar>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">signin</span>
+                <span className="truncate text-xs">sign in</span>
+              </div>
+              <ChevronsUpDown className="ml-auto size-4" />
+            </SidebarMenuButton>
+            </SidebarMenu>
+        )
+      }
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

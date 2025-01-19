@@ -37,3 +37,69 @@ export const sidebarContent = [
       icon: ThumbsUp,
     },
 ]
+
+export const registerFormControls = [
+    {
+      name: "fullName",
+      label: "Full Name",
+      placeholder: "Enter your full name",
+      componentType: "input",
+      type: "text",
+    },
+    {
+      name: "username",
+      label: "User Name",
+      placeholder: "Enter your user name",
+      componentType: "input",
+      type: "text",
+    },
+    {
+      name: "email",
+      label: "Email",
+      placeholder: "Enter your email",
+      componentType: "input",
+      type: "email",
+    },
+    {
+      name: "avatar",
+      label: "Avatar",
+      componentType: "file",
+    },
+    {
+      name: "coverImage",
+      label: "coverImage",
+      componentType: "file",
+    },
+    {
+      name: "password",
+      label: "Password",
+      placeholder: "Enter your password",
+      componentType: "input",
+      type: "password",
+    }
+  
+]
+
+export const loginFormControls = [
+  {
+    name: "username",
+    label: "User Name",
+    placeholder: "Enter your user name",
+    componentType: "input",
+    type: "text",
+  },
+  {
+    name: "email",
+    label: "Email",
+    placeholder: "Enter your email",
+    componentType: "input",
+    type: "email",
+  },
+  {
+    name: "password",
+    label: "Password",
+    placeholder: "Enter your password",
+    componentType: "input",
+    type: "password",
+  }
+]
