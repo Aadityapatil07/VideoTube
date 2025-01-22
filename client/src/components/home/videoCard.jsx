@@ -35,10 +35,13 @@ export default function VideoCard({ video }) {
         };
 
         setAge(calculateAge());
-        const interval = setInterval(() => setAge(calculateAge()), 1000); // Update every second
 
-        return () => clearInterval(interval); // Cleanup on unmount
-    }, [video.createdAt]);
+    const interval = setInterval(() => {
+        setAge(calculateAge());
+    }, 60000); // Update every 60 seconds instead of 1 second (better for performance)
+
+    return () => clearInterval(interval);
+    }, []);
     return (
         <Link to={`/watch-video/${video._id}`}>
         <Card className="w-full border-none max-w-sm mx-auto shadow-none hover:shadow-xl transition-shadow bg-transparent">

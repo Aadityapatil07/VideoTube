@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-    isLoading: false,
+    isLoading: true,
     videos: [],
     videoDetails: null
 }
@@ -21,7 +21,6 @@ export const getVideoById = createAsyncThunk(
     "videos/getVideoById",
     async (videoId)=>{
         const result = await axios.get(`${weburl}/api/v1/videos/${videoId}`)
-        console.log("result",result?.data.data[0])
         return result?.data.data[0]
     }
     
@@ -52,7 +51,6 @@ const videoSlice = createSlice({
                 state.isLoading = true;    
             })
             .addCase(getVideoById.fulfilled, (state, action) => {
-                console.log("Payload in fulfilled case:", action.payload);
                 state.isLoading = false;
                 state.videoDetails = action.payload   
             })

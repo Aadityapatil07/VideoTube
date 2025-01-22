@@ -38,7 +38,6 @@ export function AppSidebar({ ...props }) {
   const navigate = useNavigate()
 
 const {userData, isAuthenticated }= useSelector((state)=> state.user)
-console.log(userData , isAuthenticated)
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader >

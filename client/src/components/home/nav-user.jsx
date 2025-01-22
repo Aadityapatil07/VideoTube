@@ -41,7 +41,7 @@ export function NavUser({
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const handleLogout = ()=>{
-    dispatch(logoutUser)
+    dispatch(logoutUser())
     navigate('/auth/login')
   }
 
@@ -102,7 +102,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={()=>handleLogout()}>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               Log out
             </DropdownMenuItem>

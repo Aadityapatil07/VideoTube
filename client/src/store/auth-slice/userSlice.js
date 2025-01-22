@@ -51,12 +51,14 @@ export const loginUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
     "user/logoutUser",
     async()=>{
+        console.log("logout")
         const response = axios.post(`${weburl}/api/v1/users/logout`,
             {},
             {
                 withCredentials: true,
             }
         )
+        console.log("logout")
         return response.data
        
     }
@@ -83,7 +85,6 @@ export const getChannelDetails = createAsyncThunk(
     "user/getChannelDetails",
     async (channelId) => {
         const result = await axios.get(`${weburl}/api/v1/users/c/${channelId}`)
-        console.log("channel", result.data.data)
         return result.data.data
     }
 )
@@ -130,10 +131,8 @@ const userSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(getCurrentUser.fulfilled, (state, action) => {
-                console.log("get",action.payload.data)
                 state.isLoading = false
                 state.userData = action.payload.data
-                console.log(state.userData)
                 state.isAuthenticated = action.payload.success
             })
             .addCase(getCurrentUser.rejected, (state, action) => {

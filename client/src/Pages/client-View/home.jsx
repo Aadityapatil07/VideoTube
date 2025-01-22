@@ -6,16 +6,18 @@ import VideoCard from "@/components/home/videoCard"
 function Home() {
 
   const dispatch = useDispatch()
-  const { videos, isloading } = useSelector((state) => state.videos)
+  const { videos, isLoading } = useSelector((state) => state.videos)
 
   useEffect(() => {
-    dispatch(fetchAllVideos())
-  }, [])
+    if (!videos || videos.length === 0) {
+      dispatch(fetchAllVideos());
+    }
+  }, [dispatch, videos])
   
 
   console.log(videos)
 
-  return !isloading ? (
+  return !isLoading ? (
 
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
       <div className="grid auto-rows-min gap-4 md:grid-cols-4 lg">

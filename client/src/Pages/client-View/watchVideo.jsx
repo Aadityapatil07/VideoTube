@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import {getChannelDetails} from "@/store/auth-slice/userSlice"
 import { ArrowDownToLine, EllipsisVertical, Forward, ThumbsDown, ThumbsUp } from "lucide-react";
+import { useMemo } from "react";
 
 function WatchVideo() {
   const dispatch = useDispatch();
@@ -17,16 +18,16 @@ function WatchVideo() {
 
   // Fetch video details on mount and when `videoId` changes
   useEffect(() => {
-    if (videoId) {
+    if (videoId || !videoDetails) {
       dispatch(getVideoById(videoId));
     }
-  }, [dispatch,videoId]);
+  }, [dispatch,videoId, videoDetails]);
 
   useEffect(()=>{
       if(videoDetails?.owner){
         dispatch(getChannelDetails(videoDetails?.owner))
       }
-  },[dispatch, videoDetails?.owner])
+  },[dispatch,videoDetails?.owner])
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -48,6 +49,11 @@ function WatchVideo() {
       return views.toString(); // Less than 1000, return as is
     }
   }
+
+
+const formattedViews = useMemo(() => formatViews(videoDetails?.views || 0), [videoDetails?.views]);
+const formattedDate = useMemo(() => formatDate(videoDetails?.createdAt || ""), [videoDetails?.createdAt]);
+
   const recommendations = [
     {
       id: "1",
@@ -73,16 +79,17 @@ function WatchVideo() {
   ];
 
   // Loading state
-  if (videoLoading) {
+  if (videoLoading || channelLoading) {
     return <div className="text-center mt-4">Loading...</div>;
   }
+  
 
   // No video found
   if (!videoDetails) {
     return <div className="text-center mt-4">No video found.</div>;
   }
   if (!channelDetails) {
-    return <div className="text-center mt-4">No video found.</div>;
+    return <div className="text-center mt-4">No channel found.</div>;
   }
 
   // Video URL and details
@@ -158,8 +165,9 @@ function WatchVideo() {
     {/* Video Details */}
     <div className="video-details p-4 bg-gray-100 rounded-lg shadow-md">
       <div className="flex justify-between text-black text-base">
-        <p>{videoDetails.views? formatViews(videoDetails.views) : "0 views"}</p>
-        <p>{videoDetails.createdAt ? formatDate(videoDetails.createdAt) : "Unknown Date"}</p>
+      <p>{formattedViews}</p>
+<p>{formattedDate}</p>
+
       </div>
       <p className="mt-4 text-gray-600">{videoDetails.description || "No description available."}</p>
     </div>
