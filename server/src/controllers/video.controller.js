@@ -81,7 +81,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
 const publishAVideo = asyncHandler(async (req, res) => {
   const { title, description, category } = req.body
   const userId = req.user._id
-  console.log(title, description, category);
+  console.log(req.files);
 
 
   if (

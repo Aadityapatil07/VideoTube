@@ -6,19 +6,20 @@ import { useParams } from "react-router-dom";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import {getChannelDetails} from "@/store/auth-slice/userSlice"
 import { ArrowDownToLine, EllipsisVertical, Forward, ThumbsDown, ThumbsUp } from "lucide-react";
-import { useMemo } from "react";
+import { calculateAge, formatViews } from "@/conf/config";
+
 
 function WatchVideo() {
   const dispatch = useDispatch();
   const { videoId } = useParams();
 
   // Extract video details and loading state from Redux
-  const { videoDetails, isLoading:videoLoading } = useSelector((state) => state.videos);
-  const {channelDetails , isLoading:channelLoading } = useSelector((state) => state.user);
+  const { videoDetails, videoLoading } = useSelector((state) => state.videos);
+  const {channelDetails ,channelLoading } = useSelector((state) => state.user);
 
   // Fetch video details on mount and when `videoId` changes
   useEffect(() => {
-    if (videoId || !videoDetails) {
+    if (videoId && !videoDetails) {
       dispatch(getVideoById(videoId));
     }
   }, [dispatch,videoId, videoDetails]);
@@ -29,30 +30,25 @@ function WatchVideo() {
       }
   },[dispatch,videoDetails?.owner])
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInMs = now - date;
-    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
-  
-    if (diffInDays < 1) return "Today";
-    if (diffInDays < 30) return `${diffInDays} days ago`;
-    if (diffInDays < 365) return `${Math.floor(diffInDays / 30)} months ago`;
-    return `${Math.floor(diffInDays / 365)} years ago`;
-  }
-  const formatViews = (views) => {
-    if (views >= 1_000_000) {
-      return (views / 1_000_000).toFixed(1) + "M views"; // Convert to M (Million)
-    } else if (views >= 1_000) {
-      return (views / 1_000).toFixed(1) + "K views"; // Convert to K (Thousand)
-    } else {
-      return views.toString(); // Less than 1000, return as is
-    }
-  }
+  const handleDownload = () => {
+    fetch(videoDetails.videoFile)
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'CustomFileName.pdf'; // Specify your filename here
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => console.error('Download failed:', error));
+}
 
-
-const formattedViews = useMemo(() => formatViews(videoDetails?.views || 0), [videoDetails?.views]);
-const formattedDate = useMemo(() => formatDate(videoDetails?.createdAt || ""), [videoDetails?.createdAt]);
 
   const recommendations = [
     {
@@ -102,7 +98,7 @@ const formattedDate = useMemo(() => formatDate(videoDetails?.createdAt || ""), [
   <div className="flex-1">
     {/* Video Player */}
     <div
-      className="video-player mb-6 rounded-xl overflow-hidden shadow-lg border border-gray-300"
+      className="video-player mb-3 rounded-xl overflow-hidden shadow-lg border border-gray-300"
       style={{ borderRadius: "12px" }}
     >
       <ReactPlayer
@@ -116,7 +112,7 @@ const formattedDate = useMemo(() => formatDate(videoDetails?.createdAt || ""), [
     </div>
 
     {/* Video Title */}
-    <h1 className="text-3xl font-bold mb-2 text-gray-900">
+    <h1 className="text-xl font-bold mb-2 text-gray-900">
       {videoDetails.title || "Untitled Video"}
     </h1>
 
@@ -128,6 +124,7 @@ const formattedDate = useMemo(() => formatDate(videoDetails?.createdAt || ""), [
           <AvatarImage
             src={videoDetails.user[0].avatar}
             alt={videoDetails.user[0].username}
+            className="h-full w rounded-full object-cover"
           />
         </Avatar>
 
@@ -150,11 +147,11 @@ const formattedDate = useMemo(() => formatDate(videoDetails?.createdAt || ""), [
         <button className="flex items-center gap-1 hover:text-red-500 transition-all">
           <ThumbsDown /> <span>Dislike</span>
         </button>
-        <button className="flex items-center gap-1 hover:text-green-600 transition-all">
-          <ArrowDownToLine /> <span>Save</span>
+        <button onClick={handleDownload} className="flex items-center gap-1 hover:text-green-600 transition-all">
+          <ArrowDownToLine/> <span>Save</span>
         </button>
         <button className="flex items-center gap-1 hover:text-purple-600 transition-all">
-          <Forward /> <span>Share</span>
+          <Forward/><span>Share</span>
         </button>
         <button className="hover:text-gray-800">
           <EllipsisVertical />
@@ -165,8 +162,8 @@ const formattedDate = useMemo(() => formatDate(videoDetails?.createdAt || ""), [
     {/* Video Details */}
     <div className="video-details p-4 bg-gray-100 rounded-lg shadow-md">
       <div className="flex justify-between text-black text-base">
-      <p>{formattedViews}</p>
-<p>{formattedDate}</p>
+      <p>{formatViews(videoDetails.views)}</p>
+<p>{calculateAge(videoDetails.createdAt)}</p>
 
       </div>
       <p className="mt-4 text-gray-600">{videoDetails.description || "No description available."}</p>

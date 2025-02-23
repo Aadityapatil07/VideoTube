@@ -8,6 +8,7 @@ function Home() {
   const dispatch = useDispatch()
   const { videos, isLoading } = useSelector((state) => state.videos)
 
+
   useEffect(() => {
     if (!videos || videos.length === 0) {
       dispatch(fetchAllVideos());
@@ -15,7 +16,6 @@ function Home() {
   }, [dispatch, videos])
   
 
-  console.log(videos)
 
   return !isLoading ? (
 
@@ -38,6 +38,7 @@ function Home() {
           }
       </div>
       <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
+     
     </div>
   ) : (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">

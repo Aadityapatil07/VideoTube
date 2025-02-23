@@ -2,7 +2,7 @@ import weburl from "@/conf/conf";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 const initialState = {
-    isLoading: true,
+    channelLoading: true,
     isAuthenticated: false,
     channelDetails: null,
     userData: null
@@ -100,59 +100,59 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(registerUser.pending, (state) => {
-                state.isLoading = true
+                state.channelLoading = true
             })
             .addCase(registerUser.fulfilled, (state, action) => {
-                state.isLoading = false
+                state.channelLoading = false
                 state.userData = null
                 state.isAuthenticated = false
 
             })
             .addCase(registerUser.rejected, (state, action) => {
-                state.isLoading = false
+                state.channelLoading = false
                 state.user = null
                 state.isAuthenticated = false
             })
             .addCase(loginUser.pending, (state) => {
-                state.isLoading = true
+                state.channelLoading = true
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 console.log(action)
-                state.isLoading = false
+                state.channelLoading = false
                 state.userData = action.payload.data
                 console.log(state.userData)
                 state.isAuthenticated = action.payload.success
 
             })
             .addCase(loginUser.rejected, (state, action) => {
-                state.isLoading = false
+                state.channelLoading = false
             })
             .addCase(getCurrentUser.pending, (state) => {
-                state.isLoading = true;
+                state.channelLoading = true;
             })
             .addCase(getCurrentUser.fulfilled, (state, action) => {
-                state.isLoading = false
+                state.channelLoading = false
                 state.userData = action.payload.data
                 state.isAuthenticated = action.payload.success
             })
             .addCase(getCurrentUser.rejected, (state, action) => {
-                state.isLoading = false;
+                state.channelLoading = false;
                 state.userData = null;
                 state.isAuthenticated = false;
             })
             .addCase(getChannelDetails.pending, (state) => {
-                state.isLoading = true;
+                state.channelLoading = true;
             })
             .addCase(getChannelDetails.fulfilled, (state, action) => {
-                state.isLoading = false;
+                state.channelLoading = false;
                 state.channelDetails = action.payload;
             })
             .addCase(getChannelDetails.rejected, (state) => {
-                state.isLoading = false;
+                state.channelLoading = false;
                 state.channelDetails = null;
             })
             .addCase(logoutUser.fulfilled, (state, action) => {
-                state.isLoading = false;
+                state.channelLoading = false;
                 state.userData = null;
                 state.isAuthenticated = false;
               });

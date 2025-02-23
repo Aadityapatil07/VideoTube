@@ -5,13 +5,14 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { Plus, Search, Upload } from "lucide-react"
+import {Search} from "lucide-react"
 import { Outlet } from "react-router-dom"
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { loginUser, getCurrentUser } from "./store/auth-slice/userSlice"
 import { useState } from "react"
+import AddVideoDialog from "./components/home/addVideoDialog"
 
 export default function Page() {
   const dispatch = useDispatch()
@@ -46,20 +47,16 @@ if(isLoading)return <div>Loading.....</div>
 
       {/* Action Buttons */}
       <div className="flex items-center gap-4">
-        <button className="bg-gray-100 flex items-center text-gray-600 justify-center py-2 px-2 rounded-full transition hover:bg-gray-300">
-          <Plus size={23} strokeWidth={1.5} className="size-6 text-gray-600 mr-2" />
-          Create
-        </button>
+        {isAuthenticated && <AddVideoDialog/>}
 {isAuthenticated?
 (<Avatar className="h-12 w-12 rounded-full bg-gray-300 overflow-hidden">
           <AvatarImage
           src={userData.avatar}
           alt={userData.username}
           className="h-full w-full object-cover" />
-          <AvatarFallback className="rounded-full">CN</AvatarFallback>
         </Avatar>):(<Avatar className="h-12 w-12 rounded-full bg-gray-300 overflow-hidden">
           <AvatarImage
-          src="/avatars/shadcn.jpg"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/694px-Unknown_person.jpg"
           className="h-full w-full object-cover" />
         </Avatar>)}
       </div>
